@@ -8,14 +8,16 @@ import time
 
 spanish_stemmer = SnowballStemmer('spanish')
 
+
 def procesar_consulta(query):
     tokens = word_tokenize(query.lower())
     raices = [spanish_stemmer.stem(token) for token in tokens]
     return raices
 
+
 def buscar_urls(raices, archivo_path):
     start_time = time.time()
-    
+
     palabras_coincidentes = []
     with open(archivo_path, 'r', encoding='utf-8') as f:
         for linea in f:
@@ -26,7 +28,7 @@ def buscar_urls(raices, archivo_path):
 
     urls = []
     url_word_counts = {}
-    
+
     for palabra in palabras_coincidentes:
         for url, word_count in palabra['Frecuencia de URL'].items():
             url_stem = url.strip('"')
@@ -47,15 +49,16 @@ def buscar_urls(raices, archivo_path):
 
     return resultados
 
+
 def buscar(request):
     if 'query' in request.GET:
         query = request.GET.get('query', '')
         raices = procesar_consulta(query)
 
         # Reemplazar con la ruta correcta
-        archivo_path = 'D:/documentos/7moSemestre/RecuperaciónInformación/3erParcial/SearcherDjango/proyecto/buscador/indx_invertido/index_invertido.txt'
+        archivo_path = 'C:/Users/Braya/OneDrive/Documentos/Documentos/Documentos/Carrera Ingenieria en Computacion/7mo Semestre/Recuperacion de informacion/3er Parcial/proyecto2/duckgool/buscador/indx_invertido/indx_inverted.txt'
         resultados = buscar_urls(raices, archivo_path)
 
-        return render(request, 'buscador/resultados.html', {'query': query, 'num_resultados': len(resultados['urls']), 'resultados': resultados})
-    
+        return render(request, 'buscador/buscar.html', {'query': query, 'num_resultados': len(resultados['urls']), 'resultados': resultados})
+
     return render(request, 'buscador/buscar.html')
