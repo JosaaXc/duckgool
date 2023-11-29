@@ -56,7 +56,7 @@ def buscar(request):
         raices = procesar_consulta(query)
 
         # Reemplazar con la ruta correcta
-        archivo_path = 'C:/Users/Braya/OneDrive/Documentos/Documentos/Documentos/Carrera Ingenieria en Computacion/7mo Semestre/Recuperacion de informacion/3er Parcial/proyecto2/duckgool/buscador/indx_invertido/indx_inverted.txt'
+        archivo_path = 'D:/documentos/7moSemestre/RecuperaciónInformación/3erParcial/SearcherDjango/duckgool/buscador/indx_invertido/index_invertido.txt'
         resultados = buscar_urls(raices, archivo_path)
 
         return render(request, 'buscador/buscar.html', {'query': query, 'num_resultados': len(resultados['urls']), 'resultados': resultados})
