@@ -14,17 +14,17 @@ def procesar_consulta(query):
     raices = [spanish_stemmer.stem(token) for token in tokens]
     return raices
 
-
-def buscar_urls(raices, archivo_path):
+def buscar_urls(raices, archivos_paths):
     start_time = time.time()
 
     palabras_coincidentes = []
-    with open(archivo_path, 'r', encoding='utf-8') as f:
-        for linea in f:
-            if linea.strip():  # Ignorar líneas vacías
-                palabra = json.loads(linea)
-                if any(spanish_stemmer.stem(palabra['Palabra']) == raiz for raiz in raices):
-                    palabras_coincidentes.append(palabra)
+    for archivo_path in archivos_paths:
+        with open(archivo_path, 'r', encoding='utf-8') as f:
+            for linea in f:
+                if linea.strip():  # Ignorar líneas vacías
+                    palabra = json.loads(linea)
+                    if any(spanish_stemmer.stem(palabra['Palabra']) == raiz for raiz in raices):
+                        palabras_coincidentes.append(palabra)
 
     urls = []
     url_word_counts = {}
@@ -49,15 +49,15 @@ def buscar_urls(raices, archivo_path):
 
     return resultados
 
-
 def buscar(request):
     if 'query' in request.GET:
         query = request.GET.get('query', '')
         raices = procesar_consulta(query)
 
         # Reemplazar con la ruta correcta
-        archivo_path = 'D:/documentos/7moSemestre/RecuperaciónInformación/3erParcial/SearcherDjango/duckgool/buscador/indx_invertido/index_invertido.txt'
-        resultados = buscar_urls(raices, archivo_path)
+        archivo_path = 'D:/documentos/7moSemestre/RecuperaciónInformación/3erParcial/SearcherDjango/duckgool/buscador/indx_invertido/index_invertido1.txt'
+        archivo_path2 = 'D:/documentos/7moSemestre/RecuperaciónInformación/3erParcial/SearcherDjango/duckgool/buscador/indx_invertido/index_invertido2.txt'
+        resultados = buscar_urls(raices, [archivo_path, archivo_path2])
 
         return render(request, 'buscador/buscar.html', {'query': query, 'num_resultados': len(resultados['urls']), 'resultados': resultados})
 
